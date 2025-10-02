@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blancosy Financials - Interactive Dashboard</title>
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdn.plot.ly/plotly-2.26.0.min.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" as="style">
-    
     <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -18,8 +14,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
         }
         .dashboard-container {
             background: rgba(255, 255, 255, 0.95);
@@ -36,7 +30,13 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .controls-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .metric-card {
             background: white;
@@ -46,27 +46,9 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             border-left: 5px solid;
-            position: relative;
-            overflow: hidden;
-        }
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: translateX(-100%);
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         .metric-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
         }
         .metric-card.success { border-left-color: #28a745; }
         .metric-card.info { border-left-color: #17a2b8; }
@@ -79,7 +61,6 @@
             padding: 25px;
             margin-bottom: 30px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
             min-height: 450px;
         }
         .chart-title {
@@ -89,6 +70,44 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #ecf0f1;
         }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-select, .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .form-select:focus, .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .comparison-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
         .loading-overlay {
             position: absolute;
             top: 0;
@@ -97,94 +116,29 @@
             bottom: 0;
             background: rgba(255, 255, 255, 0.9);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             border-radius: 15px;
             z-index: 10;
         }
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+        .year-badge {
+            font-size: 1.1em;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #f5c6cb;
-        }
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border: 1px solid #c3e6cb;
-        }
-        .footer-section {
-            background: #2c3e50;
+        .active-year {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 40px;
         }
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 0.8s ease-in forwards;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                margin: 10px;
-                padding: 20px;
-            }
-            .hero-section {
-                padding: 20px;
-            }
-            .metric-card {
-                padding: 20px;
-            }
-            .chart-container {
-                padding: 15px;
-                min-height: 350px;
-            }
+        .inactive-year {
+            background: #e9ecef;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container fade-in">
-        <!-- Loading Status -->
-        <div id="loading-status" class="success-message" style="display: none;">
-            <i class="fas fa-check-circle me-2"></i>Dashboard loaded successfully! All calculations verified.
-        </div>
-        
-        <!-- Error Status -->
-        <div id="error-status" class="error-message" style="display: none;">
-            <h5><i class="fas fa-exclamation-triangle me-2"></i>Loading Issue Detected</h5>
-            <p>Some charts may not be loading properly. This could be due to:</p>
-            <ul>
-                <li>Slow internet connection</li>
-                <li>Ad blocker interference</li>
-                <li>Browser compatibility issues</li>
-            </ul>
-            <p><strong>Solutions:</strong> Try refreshing (Ctrl+F5), disable ad blockers, or use Chrome/Firefox.</p>
-        </div>
-
+    <div class="dashboard-container">
         <!-- Hero Section -->
         <div class="hero-section">
             <h1 class="display-4 fw-bold mb-3">
@@ -194,31 +148,93 @@
             <div class="row">
                 <div class="col-md-4">
                     <span class="badge bg-light text-dark fs-6 mb-2">
-                        <i class="fas fa-calendar me-2"></i>Official P&L 2024
+                        <i class="fas fa-calendar me-2"></i>Multi-Year Analysis
                     </span>
                 </div>
                 <div class="col-md-4">
                     <span class="badge bg-success fs-6 mb-2">
-                        <i class="fas fa-check-circle me-2"></i>Verified: KES 3,389,075
+                        <i class="fas fa-check-circle me-2"></i>Interactive Controls
                     </span>
                 </div>
                 <div class="col-md-4">
                     <span class="badge bg-info fs-6 mb-2">
-                        <i class="fas fa-chart-bar me-2"></i>Interactive Charts
+                        <i class="fas fa-chart-bar me-2"></i>Dynamic Charts
                     </span>
                 </div>
             </div>
         </div>
 
-        <!-- Key Metrics -->
-        <div class="row mb-4">
+        <!-- Interactive Controls -->
+        <div class="controls-section">
+            <h4 class="mb-4"><i class="fas fa-sliders-h me-2"></i>Dashboard Controls</h4>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="control-group">
+                        <label class="control-label">Select Year</label>
+                        <select id="yearSelect" class="form-select">
+                            <option value="2024">2024 (Official P&L)</option>
+                            <option value="2025">2025 (Detailed)</option>
+                            <option value="both">Compare Both Years</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="control-group">
+                        <label class="control-label">Chart Type</label>
+                        <select id="chartTypeSelect" class="form-select">
+                            <option value="waterfall">Waterfall Analysis</option>
+                            <option value="pie">Expense Breakdown</option>
+                            <option value="bar">Category Comparison</option>
+                            <option value="line">Trend Analysis</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="control-group">
+                        <label class="control-label">Expense Filter</label>
+                        <select id="expenseFilter" class="form-select">
+                            <option value="all">All Expenses</option>
+                            <option value="operating">Operating Only</option>
+                            <option value="cogs">COGS Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="control-group">
+                        <label class="control-label">View Mode</label>
+                        <select id="viewMode" class="form-select">
+                            <option value="amount">Amount (KES)</option>
+                            <option value="percentage">Percentage (%)</option>
+                            <option value="both">Amount + Percentage</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button id="updateCharts" class="btn btn-custom me-3">
+                        <i class="fas fa-sync-alt me-2"></i>Update Charts
+                    </button>
+                    <button id="resetFilters" class="btn btn-outline-secondary">
+                        <i class="fas fa-undo me-2"></i>Reset Filters
+                    </button>
+                    <div class="float-end">
+                        <span class="year-badge active-year" id="year2024Badge">2024</span>
+                        <span class="year-badge inactive-year" id="year2025Badge">2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Metrics -->
+        <div class="row mb-4" id="metricsRow">
             <div class="col-md-3">
                 <div class="metric-card success">
                     <div class="text-center">
                         <i class="fas fa-dollar-sign fa-3x text-success mb-3"></i>
-                        <h3 class="text-success">KES 22,619,122</h3>
+                        <h3 class="text-success" id="salesMetric">KES 22,619,122</h3>
                         <p class="mb-0 fw-bold">Sales Revenue</p>
-                        <small class="text-muted">100% of Revenue</small>
+                        <small class="text-muted" id="salesSubtext">2024 Official</small>
                     </div>
                 </div>
             </div>
@@ -226,9 +242,9 @@
                 <div class="metric-card info">
                     <div class="text-center">
                         <i class="fas fa-chart-pie fa-3x text-info mb-3"></i>
-                        <h3 class="text-info">KES 5,374,558</h3>
+                        <h3 class="text-info" id="grossProfitMetric">KES 5,374,558</h3>
                         <p class="mb-0 fw-bold">Gross Profit</p>
-                        <small class="text-muted">23.8% Margin</small>
+                        <small class="text-muted" id="grossMarginSubtext">23.8% Margin</small>
                     </div>
                 </div>
             </div>
@@ -236,9 +252,9 @@
                 <div class="metric-card primary">
                     <div class="text-center">
                         <i class="fas fa-trophy fa-3x text-primary mb-3"></i>
-                        <h3 class="text-primary">KES 3,389,075</h3>
+                        <h3 class="text-primary" id="netProfitMetric">KES 3,389,075</h3>
                         <p class="mb-0 fw-bold">Net Profit</p>
-                        <small class="text-muted">15.0% Margin</small>
+                        <small class="text-muted" id="netMarginSubtext">15.0% Margin</small>
                     </div>
                 </div>
             </div>
@@ -246,490 +262,483 @@
                 <div class="metric-card warning">
                     <div class="text-center">
                         <i class="fas fa-coins fa-3x text-warning mb-3"></i>
-                        <h3 class="text-warning">KES 1,985,483</h3>
+                        <h3 class="text-warning" id="expensesMetric">KES 1,985,483</h3>
                         <p class="mb-0 fw-bold">Operating Expenses</p>
-                        <small class="text-muted">8.8% of Sales</small>
+                        <small class="text-muted" id="expensesSubtext">8.8% of Sales</small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts -->
+        <!-- Year Comparison Section -->
+        <div class="comparison-section" id="comparisonSection" style="display: none;">
+            <h5><i class="fas fa-balance-scale me-2"></i>Year-over-Year Comparison</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>2024 Performance</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-arrow-up text-success me-2"></i>Sales: KES 22,619,122</li>
+                        <li><i class="fas fa-chart-line text-info me-2"></i>Net Profit: KES 3,389,075</li>
+                        <li><i class="fas fa-percentage text-primary me-2"></i>Profit Margin: 15.0%</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6>2025 Performance</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-arrow-down text-danger me-2"></i>Sales: KES 5,604,149</li>
+                        <li><i class="fas fa-chart-line text-info me-2"></i>Net Profit: KES 2,082,322</li>
+                        <li><i class="fas fa-percentage text-primary me-2"></i>Profit Margin: 37.2%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Chart -->
         <div class="row mb-4">
-            <div class="col-lg-8">
+            <div class="col-12">
                 <div class="chart-container">
-                    <h4 class="chart-title">
+                    <h4 class="chart-title" id="chartTitle">
                         <i class="fas fa-chart-bar me-2"></i>2024 P&L Waterfall Analysis
                     </h4>
-                    <div id="waterfall-chart">
+                    <div id="dynamicChart" style="position: relative;">
                         <div class="loading-overlay">
-                            <div class="loading-spinner"></div>
-                            <p>Loading waterfall chart...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="chart-container">
-                    <h4 class="chart-title">
-                        <i class="fas fa-chart-pie me-2"></i>Expense Breakdown
-                    </h4>
-                    <div id="pie-chart">
-                        <div class="loading-overlay">
-                            <div class="loading-spinner"></div>
-                            <p>Loading pie chart...</p>
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Interactive Data Table -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="chart-container">
                     <h4 class="chart-title">
-                        <i class="fas fa-chart-column me-2"></i>Operating Expenses Analysis
-                    </h4>
-                    <div id="expenses-chart">
-                        <div class="loading-overlay">
-                            <div class="loading-spinner"></div>
-                            <p>Loading expenses chart...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detailed Financial Table -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="chart-container">
-                    <h4 class="chart-title">
-                        <i class="fas fa-table me-2"></i>Detailed Financial Breakdown
+                        <i class="fas fa-table me-2"></i>Financial Data Explorer
                     </h4>
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="dataTable">
                             <thead class="table-dark">
                                 <tr>
                                     <th>Category</th>
-                                    <th>Amount (KES)</th>
-                                    <th>% of Sales</th>
-                                    <th>Analysis</th>
+                                    <th>2024 Amount</th>
+                                    <th>2025 Amount</th>
+                                    <th>Change</th>
+                                    <th>% of Sales (2024)</th>
+                                    <th>% of Sales (2025)</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="table-success">
-                                    <td><strong><i class="fas fa-dollar-sign me-2"></i>Sales Revenue</strong></td>
-                                    <td><strong>KES 22,619,122</strong></td>
-                                    <td><strong>100.0%</strong></td>
-                                    <td><span class="badge bg-success">Excellent</span></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-box me-2"></i>Cost of Goods Sold</td>
-                                    <td>KES 17,244,564</td>
-                                    <td>76.2%</td>
-                                    <td><span class="badge bg-warning">Monitor</span></td>
-                                </tr>
-                                <tr class="table-info">
-                                    <td><strong><i class="fas fa-chart-line me-2"></i>Gross Profit</strong></td>
-                                    <td><strong>KES 5,374,558</strong></td>
-                                    <td><strong>23.8%</strong></td>
-                                    <td><span class="badge bg-info">Strong</span></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-users me-2"></i>Labour</td>
-                                    <td>KES 601,155</td>
-                                    <td>2.7%</td>
-                                    <td><span class="badge bg-success">Efficient</span></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-home me-2"></i>Rent</td>
-                                    <td>KES 192,000</td>
-                                    <td>0.8%</td>
-                                    <td><span class="badge bg-success">Low</span></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-truck me-2"></i>Transport</td>
-                                    <td>KES 1,028,770</td>
-                                    <td>4.5%</td>
-                                    <td><span class="badge bg-warning">Review</span></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-credit-card me-2"></i>Transaction Costs</td>
-                                    <td>KES 163,558</td>
-                                    <td>0.7%</td>
-                                    <td><span class="badge bg-success">Minimal</span></td>
-                                </tr>
-                                <tr class="table-primary">
-                                    <td><strong><i class="fas fa-trophy me-2"></i>Net Profit</strong></td>
-                                    <td><strong>KES 3,389,075</strong></td>
-                                    <td><strong>15.0%</strong></td>
-                                    <td><span class="badge bg-primary">Outstanding</span></td>
-                                </tr>
+                            <tbody id="dataTableBody">
+                                <!-- Dynamic content -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Key Insights -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="chart-container">
-                    <h4 class="chart-title">
-                        <i class="fas fa-lightbulb me-2"></i>Key Financial Insights
-                    </h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="alert alert-success">
-                                <h5><i class="fas fa-check-circle me-2"></i>Exceptional Profitability</h5>
-                                <p class="mb-2">Net profit margin of <strong>15.0%</strong> is outstanding for any business.</p>
-                                <small>Industry average: 5-10%</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="alert alert-info">
-                                <h5><i class="fas fa-shield-alt me-2"></i>Strong Balance Sheet</h5>
-                                <p class="mb-2">Cash position of <strong>KES 3,389,075</strong> with zero liabilities.</p>
-                                <small>Excellent financial stability</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="alert alert-warning">
-                                <h5><i class="fas fa-rocket me-2"></i>Growth Ready</h5>
-                                <p class="mb-2">Low expense ratio of <strong>8.8%</strong> enables scaling.</p>
-                                <small>Room for strategic expansion</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer-section">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="fas fa-building me-2"></i>Blancosy Financials</h5>
-                    <p>Interactive financial dashboard with verified calculations based on official P&L Account.</p>
-                    <p class="mb-0"><small><i class="fas fa-calendar me-2"></i>Generated: October 02, 2025 at 01:48 PM</small></p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <h6>Verified Calculations</h6>
-                    <p><i class="fas fa-check me-2"></i>Net Profit: KES 3,389,075</p>
-                    <p><i class="fas fa-check me-2"></i>Profit Margin: 15.0%</p>
-                    <p><i class="fas fa-check me-2"></i>All figures match P&L Account</p>
-                    <p class="mb-0"><i class="fas fa-chart-bar me-2"></i>Interactive & Responsive</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
     
-    <!-- Plotly with multiple fallbacks -->
     <script>
-        // Chart data with verified calculations
-        const chartData = {
-  "waterfall": {
-    "type": "waterfall",
-    "orientation": "v",
-    "measure": [
-      "absolute",
-      "relative",
-      "relative",
-      "relative",
-      "relative",
-      "relative",
-      "total"
-    ],
-    "x": [
-      "Sales",
-      "COGS",
-      "Labour",
-      "Rent",
-      "Transport",
-      "Transaction Costs",
-      "Net Profit"
-    ],
-    "y": [
-      22619122,
-      -17244564,
-      -601155,
-      -192000,
-      -1028770,
-      -163557.65,
-      3389075.35
-    ],
-    "text": [
-      "KES 22,619,122",
-      "-KES 17,244,564",
-      "-KES 601,155",
-      "-KES 192,000",
-      "-KES 1,028,770",
-      "-KES 163,558",
-      "KES 3,389,075"
-    ],
-    "textposition": "outside",
-    "connector": {
-      "line": {
-        "color": "rgb(63, 63, 63)"
-      }
-    },
-    "increasing": {
-      "marker": {
-        "color": "#2E8B57"
-      }
-    },
-    "decreasing": {
-      "marker": {
-        "color": "#DC143C"
-      }
-    },
-    "totals": {
-      "marker": {
-        "color": "#4169E1"
-      }
-    }
+        // Financial data
+        const financialData = {
+  "2024": {
+    "sales": 22619122,
+    "cogs": 17244564,
+    "labour": 601155,
+    "rent": 192000,
+    "transport": 1028770,
+    "transaction_costs": 163557.65,
+    "gross_profit": 5374558,
+    "total_operating_expenses": 1985482.65,
+    "net_profit": 3389075.35,
+    "gross_margin": 23.761125652887852,
+    "net_margin": 14.98323122356385
   },
-  "pie": {
-    "type": "pie",
-    "labels": [
-      "Cost of Goods Sold",
-      "Transport",
-      "Labour",
-      "Rent",
-      "Transaction Costs"
-    ],
-    "values": [
-      17244564,
-      1028770,
-      601155,
-      192000,
-      163557.65
-    ],
-    "textposition": "inside",
-    "textinfo": "percent+label",
-    "marker": {
-      "colors": [
-        "#FF6B6B",
-        "#4ECDC4",
-        "#45B7D1",
-        "#96CEB4",
-        "#FFEAA7"
-      ],
-      "line": {
-        "color": "#FFFFFF",
-        "width": 2
-      }
-    },
-    "hovertemplate": "<b>%{label}</b><br>Amount: KES %{value:,.0f}<br>Percentage: %{percent}<extra></extra>"
+  "2025": {
+    "sales": 5604149,
+    "cogs": 3162735,
+    "labour": 239092,
+    "rent": 70000,
+    "transport": 0,
+    "transaction_costs": 50000,
+    "gross_profit": 2441414,
+    "total_operating_expenses": 359092,
+    "net_profit": 2082322,
+    "gross_margin": 43.56440201714837,
+    "net_margin": 37.15679222661639
   },
-  "expenses_bar": {
-    "type": "bar",
-    "x": [
-      "Labour",
-      "Rent",
-      "Transport",
-      "Transaction Costs"
-    ],
-    "y": [
-      601155,
-      192000,
-      1028770,
-      163557.65
-    ],
-    "marker": {
-      "color": [
-        "#FF6B6B",
-        "#4ECDC4",
-        "#45B7D1",
-        "#FFEAA7"
-      ],
-      "line": {
-        "color": "#FFFFFF",
-        "width": 1
-      }
-    },
-    "text": [
-      "KES 601,155",
-      "KES 192,000",
-      "KES 1,028,770",
-      "KES 163,558"
-    ],
-    "textposition": "outside",
-    "hovertemplate": "<b>%{x}</b><br>Amount: KES %{y:,.0f}<br>% of Sales: %{customdata:.1f}%<extra></extra>",
-    "customdata": [
-      2.6577291550043363,
-      0.8488393139220877,
-      4.548231359289719,
-      0.7230946011078591
-    ]
-  }
+  "categories": [
+    "Labour",
+    "Rent",
+    "Transport",
+    "Transaction Costs"
+  ],
+  "expense_types": [
+    "Operating Expenses",
+    "Cost of Goods Sold",
+    "All Expenses"
+  ]
 };
         
-        let plotlyLoaded = false;
-        let chartsInitialized = false;
+        let currentYear = '2024';
+        let currentChartType = 'waterfall';
+        let currentExpenseFilter = 'all';
+        let currentViewMode = 'amount';
         
-        // Function to load Plotly with fallbacks
-        function loadPlotly() {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.plot.ly/plotly-2.26.0.min.js';
-            script.onload = function() {
-                plotlyLoaded = true;
-                console.log('✅ Plotly loaded successfully');
-                initializeCharts();
-            };
-            script.onerror = function() {
-                console.warn('❌ Primary Plotly CDN failed, trying fallback...');
-                loadPlotlyFallback();
-            };
-            document.head.appendChild(script);
-        }
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateDashboard();
+            populateDataTable();
+        });
         
-        function loadPlotlyFallback() {
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/plotly.js-dist@2.26.0/plotly.min.js';
-            script.onload = function() {
-                plotlyLoaded = true;
-                console.log('✅ Plotly fallback loaded successfully');
-                initializeCharts();
-            };
-            script.onerror = function() {
-                console.error('❌ All Plotly CDNs failed');
-                showError();
-            };
-            document.head.appendChild(script);
-        }
-        
-        function initializeCharts() {
-            if (chartsInitialized || !plotlyLoaded) return;
+        function setupEventListeners() {
+            document.getElementById('yearSelect').addEventListener('change', function() {
+                currentYear = this.value;
+                updateYearBadges();
+                updateDashboard();
+            });
             
-            try {
-                // Hide loading overlays
-                document.querySelectorAll('.loading-overlay').forEach(overlay => {
-                    overlay.style.display = 'none';
-                });
-                
-                // Waterfall Chart
-                const waterfallLayout = {
-                    title: {
-                        text: 'Profit Flow Analysis - Official P&L 2024',
-                        font: {size: 16, color: '#2c3e50'}
-                    },
-                    showlegend: false,
-                    template: 'plotly_white',
-                    height: 400,
-                    margin: {t: 60, b: 80, l: 80, r: 50},
-                    xaxis: {
-                        tickangle: -45,
-                        title: 'Financial Components'
-                    },
-                    yaxis: {
-                        title: 'Amount (KES)',
-                        tickformat: ',.0f'
-                    },
-                    hovermode: 'x unified'
-                };
-                
-                Plotly.newPlot('waterfall-chart', [chartData.waterfall], waterfallLayout, {
-                    responsive: true,
-                    displayModeBar: true,
-                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'autoScale2d']
-                });
-                
-                // Pie Chart
-                const pieLayout = {
-                    title: {
-                        text: 'Total Expenses Breakdown - KES 19,230,047',
-                        font: {size: 16, color: '#2c3e50'}
-                    },
-                    template: 'plotly_white',
-                    height: 400,
-                    margin: {t: 60, b: 50, l: 50, r: 50}
-                };
-                
-                Plotly.newPlot('pie-chart', [chartData.pie], pieLayout, {
-                    responsive: true,
-                    displayModeBar: true,
-                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'autoScale2d']
-                });
-                
-                // Expenses Bar Chart
-                const expensesLayout = {
-                    title: {
-                        text: 'Operating Expenses - KES 1,985,483 Total',
-                        font: {size: 16, color: '#2c3e50'}
-                    },
-                    template: 'plotly_white',
-                    height: 400,
-                    margin: {t: 60, b: 80, l: 80, r: 50},
-                    xaxis: {
-                        title: 'Expense Categories',
-                        tickangle: -45
-                    },
-                    yaxis: {
-                        title: 'Amount (KES)',
-                        tickformat: ',.0f'
-                    }
-                };
-                
-                Plotly.newPlot('expenses-chart', [chartData.expenses_bar], expensesLayout, {
-                    responsive: true,
-                    displayModeBar: true,
-                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'autoScale2d']
-                });
-                
-                chartsInitialized = true;
-                showSuccess();
-                console.log('✅ All charts initialized successfully');
-                
-            } catch (error) {
-                console.error('❌ Error initializing charts:', error);
-                showError();
-            }
-        }
-        
-        function showSuccess() {
-            document.getElementById('loading-status').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('loading-status').style.display = 'none';
-            }, 3000);
-        }
-        
-        function showError() {
-            document.getElementById('error-status').style.display = 'block';
-            document.querySelectorAll('.loading-overlay').forEach(overlay => {
-                overlay.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Chart loading failed. Please refresh the page.</div>';
+            document.getElementById('chartTypeSelect').addEventListener('change', function() {
+                currentChartType = this.value;
+                updateChart();
+            });
+            
+            document.getElementById('expenseFilter').addEventListener('change', function() {
+                currentExpenseFilter = this.value;
+                updateChart();
+            });
+            
+            document.getElementById('viewMode').addEventListener('change', function() {
+                currentViewMode = this.value;
+                updateChart();
+            });
+            
+            document.getElementById('updateCharts').addEventListener('click', function() {
+                updateDashboard();
+            });
+            
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                resetFilters();
             });
         }
         
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Dashboard initializing...');
-            loadPlotly();
+        function updateYearBadges() {
+            const badge2024 = document.getElementById('year2024Badge');
+            const badge2025 = document.getElementById('year2025Badge');
             
-            // Animate metric cards
-            setTimeout(() => {
-                const cards = document.querySelectorAll('.metric-card');
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.transform = 'translateY(0)';
-                        card.style.opacity = '1';
-                    }, index * 150);
-                });
-            }, 500);
-        });
-        
-        // Fallback timeout
-        setTimeout(() => {
-            if (!chartsInitialized) {
-                console.warn('⚠️ Charts taking too long to load, showing error message');
-                showError();
+            if (currentYear === '2024') {
+                badge2024.className = 'year-badge active-year';
+                badge2025.className = 'year-badge inactive-year';
+            } else if (currentYear === '2025') {
+                badge2024.className = 'year-badge inactive-year';
+                badge2025.className = 'year-badge active-year';
+            } else {
+                badge2024.className = 'year-badge active-year';
+                badge2025.className = 'year-badge active-year';
             }
-        }, 10000);
+        }
+        
+        function updateDashboard() {
+            updateMetrics();
+            updateChart();
+            updateComparison();
+        }
+        
+        function updateMetrics() {
+            const data = currentYear === 'both' ? financialData['2024'] : financialData[currentYear];
+            const yearText = currentYear === 'both' ? '2024 vs 2025' : currentYear;
+            
+            document.getElementById('salesMetric').textContent = `KES ${data.sales.toLocaleString()}`;
+            document.getElementById('salesSubtext').textContent = `${yearText} Sales`;
+            
+            document.getElementById('grossProfitMetric').textContent = `KES ${data.gross_profit.toLocaleString()}`;
+            document.getElementById('grossMarginSubtext').textContent = `${data.gross_margin.toFixed(1)}% Margin`;
+            
+            document.getElementById('netProfitMetric').textContent = `KES ${data.net_profit.toLocaleString()}`;
+            document.getElementById('netMarginSubtext').textContent = `${data.net_margin.toFixed(1)}% Margin`;
+            
+            document.getElementById('expensesMetric').textContent = `KES ${data.total_operating_expenses.toLocaleString()}`;
+            document.getElementById('expensesSubtext').textContent = `${(data.total_operating_expenses/data.sales*100).toFixed(1)}% of Sales`;
+        }
+        
+        function updateComparison() {
+            const comparisonSection = document.getElementById('comparisonSection');
+            comparisonSection.style.display = currentYear === 'both' ? 'block' : 'none';
+        }
+        
+        function updateChart() {
+            const chartTitle = document.getElementById('chartTitle');
+            const chartTitles = {
+                'waterfall': 'P&L Waterfall Analysis',
+                'pie': 'Expense Breakdown',
+                'bar': 'Category Comparison',
+                'line': 'Trend Analysis'
+            };
+            
+            const yearText = currentYear === 'both' ? 'Multi-Year' : currentYear;
+            chartTitle.innerHTML = `<i class="fas fa-chart-bar me-2"></i>${yearText} ${chartTitles[currentChartType]}`;
+            
+            // Hide loading overlay
+            document.querySelector('.loading-overlay').style.display = 'none';
+            
+            if (currentChartType === 'waterfall') {
+                createWaterfallChart();
+            } else if (currentChartType === 'pie') {
+                createPieChart();
+            } else if (currentChartType === 'bar') {
+                createBarChart();
+            } else if (currentChartType === 'line') {
+                createLineChart();
+            }
+        }
+        
+        function createWaterfallChart() {
+            const data = currentYear === 'both' ? financialData['2024'] : financialData[currentYear];
+            
+            const waterfallData = {
+                type: 'waterfall',
+                orientation: 'v',
+                measure: ['absolute', 'relative', 'relative', 'relative', 'relative', 'relative', 'total'],
+                x: ['Sales', 'COGS', 'Labour', 'Rent', 'Transport', 'Transaction Costs', 'Net Profit'],
+                y: [data.sales, -data.cogs, -data.labour, -data.rent, -data.transport, -data.transaction_costs, data.net_profit],
+                text: [
+                    `KES ${data.sales.toLocaleString()}`,
+                    `-KES ${data.cogs.toLocaleString()}`,
+                    `-KES ${data.labour.toLocaleString()}`,
+                    `-KES ${data.rent.toLocaleString()}`,
+                    `-KES ${data.transport.toLocaleString()}`,
+                    `-KES ${data.transaction_costs.toLocaleString()}`,
+                    `KES ${data.net_profit.toLocaleString()}`
+                ],
+                textposition: 'outside',
+                connector: {line: {color: 'rgb(63, 63, 63)'}},
+                increasing: {marker: {color: '#28a745'}},
+                decreasing: {marker: {color: '#dc3545'}},
+                totals: {marker: {color: '#007bff'}}
+            };
+            
+            const layout = {
+                title: `${currentYear} Profit Flow Analysis`,
+                showlegend: false,
+                template: 'plotly_white',
+                height: 400,
+                margin: {t: 60, b: 80, l: 80, r: 50},
+                xaxis: {tickangle: -45},
+                yaxis: {tickformat: ',.0f'}
+            };
+            
+            Plotly.newPlot('dynamicChart', [waterfallData], layout, {responsive: true});
+        }
+        
+        function createPieChart() {
+            const data = currentYear === 'both' ? financialData['2024'] : financialData[currentYear];
+            
+            let labels, values;
+            if (currentExpenseFilter === 'operating') {
+                labels = ['Labour', 'Rent', 'Transport', 'Transaction Costs'];
+                values = [data.labour, data.rent, data.transport, data.transaction_costs];
+            } else if (currentExpenseFilter === 'cogs') {
+                labels = ['Cost of Goods Sold'];
+                values = [data.cogs];
+            } else {
+                labels = ['COGS', 'Labour', 'Rent', 'Transport', 'Transaction Costs'];
+                values = [data.cogs, data.labour, data.rent, data.transport, data.transaction_costs];
+            }
+            
+            const pieData = {
+                type: 'pie',
+                labels: labels,
+                values: values,
+                textposition: 'inside',
+                textinfo: currentViewMode === 'percentage' ? 'percent' : 'label+percent',
+                marker: {
+                    colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
+                    line: {color: '#FFFFFF', width: 2}
+                }
+            };
+            
+            const layout = {
+                title: `${currentYear} Expense Distribution`,
+                template: 'plotly_white',
+                height: 400
+            };
+            
+            Plotly.newPlot('dynamicChart', [pieData], layout, {responsive: true});
+        }
+        
+        function createBarChart() {
+            if (currentYear === 'both') {
+                // Comparison chart
+                const categories = ['Sales', 'Gross Profit', 'Net Profit', 'Operating Expenses'];
+                const data2024 = [
+                    financialData['2024'].sales,
+                    financialData['2024'].gross_profit,
+                    financialData['2024'].net_profit,
+                    financialData['2024'].total_operating_expenses
+                ];
+                const data2025 = [
+                    financialData['2025'].sales,
+                    financialData['2025'].gross_profit,
+                    financialData['2025'].net_profit,
+                    financialData['2025'].total_operating_expenses
+                ];
+                
+                const trace1 = {
+                    x: categories,
+                    y: data2024,
+                    name: '2024',
+                    type: 'bar',
+                    marker: {color: '#667eea'}
+                };
+                
+                const trace2 = {
+                    x: categories,
+                    y: data2025,
+                    name: '2025',
+                    type: 'bar',
+                    marker: {color: '#764ba2'}
+                };
+                
+                const layout = {
+                    title: 'Year-over-Year Comparison',
+                    barmode: 'group',
+                    template: 'plotly_white',
+                    height: 400,
+                    yaxis: {tickformat: ',.0f'}
+                };
+                
+                Plotly.newPlot('dynamicChart', [trace1, trace2], layout, {responsive: true});
+            } else {
+                // Single year chart
+                const data = financialData[currentYear];
+                const categories = ['Labour', 'Rent', 'Transport', 'Transaction Costs'];
+                const values = [data.labour, data.rent, data.transport, data.transaction_costs];
+                
+                const barData = {
+                    x: categories,
+                    y: values,
+                    type: 'bar',
+                    marker: {color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFEAA7']},
+                    text: values.map(v => `KES ${v.toLocaleString()}`),
+                    textposition: 'outside'
+                };
+                
+                const layout = {
+                    title: `${currentYear} Operating Expenses`,
+                    template: 'plotly_white',
+                    height: 400,
+                    yaxis: {tickformat: ',.0f'}
+                };
+                
+                Plotly.newPlot('dynamicChart', [barData], layout, {responsive: true});
+            }
+        }
+        
+        function createLineChart() {
+            // Mock trend data for demonstration
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const data2024 = financialData['2024'];
+            const data2025 = financialData['2025'];
+            
+            // Simulate monthly data
+            const monthly2024 = months.map((_, i) => data2024.sales / 12 * (0.8 + Math.random() * 0.4));
+            const monthly2025 = months.map((_, i) => data2025.sales / 12 * (0.8 + Math.random() * 0.4));
+            
+            const trace1 = {
+                x: months,
+                y: monthly2024,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: '2024 Sales Trend',
+                line: {color: '#667eea', width: 3},
+                marker: {size: 8}
+            };
+            
+            const trace2 = {
+                x: months,
+                y: monthly2025,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: '2025 Sales Trend',
+                line: {color: '#764ba2', width: 3},
+                marker: {size: 8}
+            };
+            
+            const layout = {
+                title: 'Monthly Sales Trend Analysis',
+                template: 'plotly_white',
+                height: 400,
+                xaxis: {title: 'Month'},
+                yaxis: {title: 'Sales (KES)', tickformat: ',.0f'}
+            };
+            
+            const traces = currentYear === 'both' ? [trace1, trace2] : 
+                          currentYear === '2024' ? [trace1] : [trace2];
+            
+            Plotly.newPlot('dynamicChart', traces, layout, {responsive: true});
+        }
+        
+        function populateDataTable() {
+            const tbody = document.getElementById('dataTableBody');
+            const categories = [
+                {name: 'Sales Revenue', key: 'sales', type: 'income'},
+                {name: 'Cost of Goods Sold', key: 'cogs', type: 'expense'},
+                {name: 'Gross Profit', key: 'gross_profit', type: 'profit'},
+                {name: 'Labour', key: 'labour', type: 'expense'},
+                {name: 'Rent', key: 'rent', type: 'expense'},
+                {name: 'Transport', key: 'transport', type: 'expense'},
+                {name: 'Transaction Costs', key: 'transaction_costs', type: 'expense'},
+                {name: 'Net Profit', key: 'net_profit', type: 'profit'}
+            ];
+            
+            tbody.innerHTML = '';
+            
+            categories.forEach(category => {
+                const val2024 = financialData['2024'][category.key];
+                const val2025 = financialData['2025'][category.key];
+                const change = val2025 - val2024;
+                const changePercent = val2024 !== 0 ? (change / val2024 * 100) : 0;
+                const pct2024 = (val2024 / financialData['2024'].sales * 100);
+                const pct2025 = (val2025 / financialData['2025'].sales * 100);
+                
+                const row = document.createElement('tr');
+                if (category.type === 'profit') row.className = 'table-info';
+                if (category.type === 'income') row.className = 'table-success';
+                
+                row.innerHTML = `
+                    <td><strong>${category.name}</strong></td>
+                    <td>KES ${val2024.toLocaleString()}</td>
+                    <td>KES ${val2025.toLocaleString()}</td>
+                    <td class="${change >= 0 ? 'text-success' : 'text-danger'}">
+                        ${change >= 0 ? '+' : ''}${changePercent.toFixed(1)}%
+                    </td>
+                    <td>${pct2024.toFixed(1)}%</td>
+                    <td>${pct2025.toFixed(1)}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function resetFilters() {
+            document.getElementById('yearSelect').value = '2024';
+            document.getElementById('chartTypeSelect').value = 'waterfall';
+            document.getElementById('expenseFilter').value = 'all';
+            document.getElementById('viewMode').value = 'amount';
+            
+            currentYear = '2024';
+            currentChartType = 'waterfall';
+            currentExpenseFilter = 'all';
+            currentViewMode = 'amount';
+            
+            updateDashboard();
+        }
     </script>
 </body>
 </html>
