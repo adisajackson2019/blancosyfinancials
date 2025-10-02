@@ -135,10 +135,24 @@
             background: #e9ecef;
             color: #6c757d;
         }
+        .update-notice {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #bee5eb;
+        }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Update Notice -->
+        <div class="update-notice">
+            <h6><i class="fas fa-info-circle me-2"></i>Data Updated</h6>
+            <p class="mb-0">2025 Transport expenses updated to include KES 77,000. All calculations and charts reflect the latest data.</p>
+        </div>
+
         <!-- Hero Section -->
         <div class="hero-section">
             <h1 class="display-4 fw-bold mb-3">
@@ -153,12 +167,12 @@
                 </div>
                 <div class="col-md-4">
                     <span class="badge bg-success fs-6 mb-2">
-                        <i class="fas fa-check-circle me-2"></i>Interactive Controls
+                        <i class="fas fa-check-circle me-2"></i>Updated 2025 Data
                     </span>
                 </div>
                 <div class="col-md-4">
                     <span class="badge bg-info fs-6 mb-2">
-                        <i class="fas fa-chart-bar me-2"></i>Dynamic Charts
+                        <i class="fas fa-chart-bar me-2"></i>Interactive Controls
                     </span>
                 </div>
             </div>
@@ -173,7 +187,7 @@
                         <label class="control-label">Select Year</label>
                         <select id="yearSelect" class="form-select">
                             <option value="2024">2024 (Official P&L)</option>
-                            <option value="2025">2025 (Detailed)</option>
+                            <option value="2025">2025 (Updated Data)</option>
                             <option value="both">Compare Both Years</option>
                         </select>
                     </div>
@@ -280,14 +294,16 @@
                         <li><i class="fas fa-arrow-up text-success me-2"></i>Sales: KES 22,619,122</li>
                         <li><i class="fas fa-chart-line text-info me-2"></i>Net Profit: KES 3,389,075</li>
                         <li><i class="fas fa-percentage text-primary me-2"></i>Profit Margin: 15.0%</li>
+                        <li><i class="fas fa-truck text-warning me-2"></i>Transport: KES 1,028,770</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h6>2025 Performance</h6>
+                    <h6>2025 Performance (Updated)</h6>
                     <ul class="list-unstyled">
                         <li><i class="fas fa-arrow-down text-danger me-2"></i>Sales: KES 5,604,149</li>
-                        <li><i class="fas fa-chart-line text-info me-2"></i>Net Profit: KES 2,082,322</li>
-                        <li><i class="fas fa-percentage text-primary me-2"></i>Profit Margin: 37.2%</li>
+                        <li><i class="fas fa-chart-line text-info me-2"></i>Net Profit: KES 2,005,322</li>
+                        <li><i class="fas fa-percentage text-primary me-2"></i>Profit Margin: 35.8%</li>
+                        <li><i class="fas fa-truck text-success me-2"></i>Transport: KES 77,000 <span class="badge bg-info">Updated</span></li>
                     </ul>
                 </div>
             </div>
@@ -316,7 +332,7 @@
             <div class="col-12">
                 <div class="chart-container">
                     <h4 class="chart-title">
-                        <i class="fas fa-table me-2"></i>Financial Data Explorer
+                        <i class="fas fa-table me-2"></i>Financial Data Explorer (Updated 2025 Transport)
                     </h4>
                     <div class="table-responsive">
                         <table class="table table-hover" id="dataTable">
@@ -345,7 +361,7 @@
     <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
     
     <script>
-        // Financial data
+        // Financial data with updated 2025 transport
         const financialData = {
   "2024": {
     "sales": 22619122,
@@ -365,13 +381,13 @@
     "cogs": 3162735,
     "labour": 239092,
     "rent": 70000,
-    "transport": 0,
+    "transport": 77000,
     "transaction_costs": 50000,
     "gross_profit": 2441414,
-    "total_operating_expenses": 359092,
-    "net_profit": 2082322,
+    "total_operating_expenses": 436092,
+    "net_profit": 2005322,
     "gross_margin": 43.56440201714837,
-    "net_margin": 37.15679222661639
+    "net_margin": 35.782810200085684
   },
   "categories": [
     "Labour",
@@ -396,6 +412,16 @@
             setupEventListeners();
             updateDashboard();
             populateDataTable();
+            
+            // Show update notice for 3 seconds
+            setTimeout(() => {
+                const notice = document.querySelector('.update-notice');
+                if (notice) {
+                    notice.style.transition = 'opacity 0.5s ease';
+                    notice.style.opacity = '0';
+                    setTimeout(() => notice.style.display = 'none', 500);
+                }
+            }, 5000);
         });
         
         function setupEventListeners() {
@@ -486,7 +512,8 @@
             chartTitle.innerHTML = `<i class="fas fa-chart-bar me-2"></i>${yearText} ${chartTitles[currentChartType]}`;
             
             // Hide loading overlay
-            document.querySelector('.loading-overlay').style.display = 'none';
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            if (loadingOverlay) loadingOverlay.style.display = 'none';
             
             if (currentChartType === 'waterfall') {
                 createWaterfallChart();
@@ -525,7 +552,7 @@
             };
             
             const layout = {
-                title: `${currentYear} Profit Flow Analysis`,
+                title: `${currentYear} Profit Flow Analysis ${currentYear === '2025' ? '(Updated Transport)' : ''}`,
                 showlegend: false,
                 template: 'plotly_white',
                 height: 400,
@@ -565,7 +592,7 @@
             };
             
             const layout = {
-                title: `${currentYear} Expense Distribution`,
+                title: `${currentYear} Expense Distribution ${currentYear === '2025' ? '(Updated Transport)' : ''}`,
                 template: 'plotly_white',
                 height: 400
             };
@@ -601,13 +628,13 @@
                 const trace2 = {
                     x: categories,
                     y: data2025,
-                    name: '2025',
+                    name: '2025 (Updated)',
                     type: 'bar',
                     marker: {color: '#764ba2'}
                 };
                 
                 const layout = {
-                    title: 'Year-over-Year Comparison',
+                    title: 'Year-over-Year Comparison (2025 Transport Updated)',
                     barmode: 'group',
                     template: 'plotly_white',
                     height: 400,
@@ -631,7 +658,7 @@
                 };
                 
                 const layout = {
-                    title: `${currentYear} Operating Expenses`,
+                    title: `${currentYear} Operating Expenses ${currentYear === '2025' ? '(Updated Transport)' : ''}`,
                     template: 'plotly_white',
                     height: 400,
                     yaxis: {tickformat: ',.0f'}
@@ -666,13 +693,13 @@
                 y: monthly2025,
                 type: 'scatter',
                 mode: 'lines+markers',
-                name: '2025 Sales Trend',
+                name: '2025 Sales Trend (Updated)',
                 line: {color: '#764ba2', width: 3},
                 marker: {size: 8}
             };
             
             const layout = {
-                title: 'Monthly Sales Trend Analysis',
+                title: 'Monthly Sales Trend Analysis (2025 Updated)',
                 template: 'plotly_white',
                 height: 400,
                 xaxis: {title: 'Month'},
@@ -712,8 +739,11 @@
                 if (category.type === 'profit') row.className = 'table-info';
                 if (category.type === 'income') row.className = 'table-success';
                 
+                const isTransport = category.key === 'transport';
+                const transportBadge = isTransport ? ' <span class="badge bg-success">Updated</span>' : '';
+                
                 row.innerHTML = `
-                    <td><strong>${category.name}</strong></td>
+                    <td><strong>${category.name}${transportBadge}</strong></td>
                     <td>KES ${val2024.toLocaleString()}</td>
                     <td>KES ${val2025.toLocaleString()}</td>
                     <td class="${change >= 0 ? 'text-success' : 'text-danger'}">
