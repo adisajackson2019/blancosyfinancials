@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Excel files (sensitive financial data)
+*.xlsx
+*.xls
+
+# Temporary files
+*.tmp
+*.temp
+debug_*.py
+test_*.py
+verify_*.py
+analyze_*.py
+
+# Logs
+*.log
+logs/
+
+# Generated files (keep index.html for GitHub Pages)
+# *.html (commented out to keep index.html)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# Data files
+data/
+*.json
+*.csv
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
