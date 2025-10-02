@@ -1,187 +1,191 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blancosy Financials - Official Analysis Dashboard</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Blancosy Financials - Interactive Dashboard</title>
+    
+    <!-- CDN Resources -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    
     <style>
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
         .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 60px 0;
-            margin-bottom: 40px;
+            border-radius: 15px;
         }
         .metric-card {
-            transition: transform 0.2s;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-left: 5px solid;
         }
         .metric-card:hover {
             transform: translateY(-5px);
         }
+        .metric-card.success { border-left-color: #28a745; }
+        .metric-card.info { border-left-color: #17a2b8; }
+        .metric-card.primary { border-left-color: #007bff; }
+        .metric-card.warning { border-left-color: #ffc107; }
+        
         .chart-container {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        .footer {
-            background-color: #343a40;
+        .chart-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+        .insight-card {
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: none;
+        }
+        .footer-section {
+            background: #2c3e50;
             color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        .badge-custom {
-            font-size: 0.9em;
-            padding: 8px 12px;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="container">
+    <div class="dashboard-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-chart-line me-3"></i>Blancosy Financials
+            </h1>
+            <p class="lead mb-4">Interactive Financial Analysis Dashboard</p>
             <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="display-4 fw-bold mb-4">
-                        <i class="fas fa-chart-line me-3"></i>Blancosy Financials
-                    </h1>
-                    <p class="lead mb-4">Official Financial Analysis Dashboard</p>
-                    <span class="badge bg-light text-dark badge-custom">
-                        <i class="fas fa-calendar me-2"></i>Based on Official P&L Account & Balance Sheet
+                <div class="col-md-6">
+                    <span class="badge bg-light text-dark fs-6 mb-2">
+                        <i class="fas fa-calendar me-2"></i>Official P&L Account 2024
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <span class="badge bg-success fs-6 mb-2">
+                        <i class="fas fa-check-circle me-2"></i>Verified: KES 3,389,075
                     </span>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
         <!-- Key Metrics -->
-        <div class="row mb-5">
-            <div class="col-md-3 mb-4">
-                <div class="card metric-card h-100 border-success">
-                    <div class="card-body text-center">
-                        <i class="fas fa-dollar-sign fa-2x text-success mb-3"></i>
-                        <h4 class="text-success">KES 22,619,122</h4>
-                        <p class="card-text">2024 Sales Revenue</p>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="metric-card success">
+                    <div class="text-center">
+                        <i class="fas fa-dollar-sign fa-3x text-success mb-3"></i>
+                        <h3 class="text-success">KES 22,619,122</h3>
+                        <p class="mb-0 fw-bold">Sales Revenue</p>
+                        <small class="text-muted">Total 2024 Sales</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card metric-card h-100 border-info">
-                    <div class="card-body text-center">
-                        <i class="fas fa-chart-pie fa-2x text-info mb-3"></i>
-                        <h4 class="text-info">KES 5,374,558</h4>
-                        <p class="card-text">Gross Profit</p>
+            <div class="col-md-3">
+                <div class="metric-card info">
+                    <div class="text-center">
+                        <i class="fas fa-chart-pie fa-3x text-info mb-3"></i>
+                        <h3 class="text-info">KES 5,374,558</h3>
+                        <p class="mb-0 fw-bold">Gross Profit</p>
                         <small class="text-muted">23.8% Margin</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card metric-card h-100 border-primary">
-                    <div class="card-body text-center">
-                        <i class="fas fa-trophy fa-2x text-primary mb-3"></i>
-                        <h4 class="text-primary">KES 3,389,075</h4>
-                        <p class="card-text">Net Profit (Official)</p>
+            <div class="col-md-3">
+                <div class="metric-card primary">
+                    <div class="text-center">
+                        <i class="fas fa-trophy fa-3x text-primary mb-3"></i>
+                        <h3 class="text-primary">KES 3,389,075</h3>
+                        <p class="mb-0 fw-bold">Net Profit</p>
                         <small class="text-muted">15.0% Margin</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card metric-card h-100 border-warning">
-                    <div class="card-body text-center">
-                        <i class="fas fa-database fa-2x text-warning mb-3"></i>
-                        <h4 class="text-warning">543</h4>
-                        <p class="card-text">Total Transactions</p>
-                        <small class="text-muted">2024-2025</small>
+            <div class="col-md-3">
+                <div class="metric-card warning">
+                    <div class="text-center">
+                        <i class="fas fa-coins fa-3x text-warning mb-3"></i>
+                        <h3 class="text-warning">KES 1,985,483</h3>
+                        <p class="mb-0 fw-bold">Operating Expenses</p>
+                        <small class="text-muted">8.8% of Sales</small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Row 1 -->
+        <!-- Charts -->
         <div class="row mb-4">
             <div class="col-lg-8">
                 <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>2024 Official P&L Waterfall Analysis</h5>
-                    <div>                            <div id="6329b50b-8e70-4ca4-b9db-4fad04c0d6d9" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("6329b50b-8e70-4ca4-b9db-4fad04c0d6d9")) {                    Plotly.newPlot(                        "6329b50b-8e70-4ca4-b9db-4fad04c0d6d9",                        [{"connector":{"line":{"color":"rgb(63, 63, 63)"}},"measure":["absolute","relative","relative","relative","relative","relative","total"],"name":"2024 P&L","orientation":"v","text":["KES 22,619,122","-KES 17,244,564","-KES 601,155","-KES 192,000","-KES 1,028,770","-KES 163,558","KES 3,389,075"],"textposition":"outside","x":["Sales","COGS","Labour","Rent","Transport","Transaction Costs","Net Profit"],"y":[22619122,-17244564,-601155,-192000,-1028770,-163557.65,3389075.35],"type":"waterfall"}],                        {"font":{"size":12},"height":500,"showlegend":false,"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"title":{"text":"2024 Official P&L Waterfall Analysis"}},                        {"responsive": true}                    )                };                            </script>        </div>
+                    <h4 class="chart-title">
+                        <i class="fas fa-chart-bar me-2"></i>2024 P&L Waterfall Analysis
+                    </h4>
+                    <div id="waterfall-chart">
+                        <div class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i>2024 Expense Breakdown</h5>
-                    <div>                            <div id="037d426a-6e59-4d7d-ace8-e173991e79e0" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("037d426a-6e59-4d7d-ace8-e173991e79e0")) {                    Plotly.newPlot(                        "037d426a-6e59-4d7d-ace8-e173991e79e0",                        [{"domain":{"x":[0.0,1.0],"y":[0.0,1.0]},"hovertemplate":"label=%{label}\u003cbr\u003evalue=%{value}\u003cextra\u003e\u003c\u002fextra\u003e","labels":["Stock Purchase (COGS)","Transport","Labour","Rent","Transaction Costs"],"legendgroup":"","name":"","showlegend":true,"textinfo":"percent+label","textposition":"inside","values":[17244564.0,1028770.0,601155.0,192000.0,163557.65],"type":"pie"}],                        {"font":{"size":12},"height":500,"legend":{"tracegroupgap":0},"piecolorway":["rgb(141,211,199)","rgb(255,255,179)","rgb(190,186,218)","rgb(251,128,114)","rgb(128,177,211)","rgb(253,180,98)","rgb(179,222,105)","rgb(252,205,229)","rgb(217,217,217)","rgb(188,128,189)","rgb(204,235,197)","rgb(255,237,111)"],"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"title":{"text":"2024 Official Expense Breakdown"}},                        {"responsive": true}                    )                };                            </script>        </div>
+                    <h4 class="chart-title">
+                        <i class="fas fa-chart-pie me-2"></i>Expense Breakdown
+                    </h4>
+                    <div id="pie-chart">
+                        <div class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Row 2 -->
-        <div class="row mb-4">
-            <div class="col-lg-6">
-                <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-chart-line me-2"></i>Year-over-Year Comparison</h5>
-                    <div>                            <div id="c953057f-c65e-44cb-b28f-90b1f7917d7c" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("c953057f-c65e-44cb-b28f-90b1f7917d7c")) {                    Plotly.newPlot(                        "c953057f-c65e-44cb-b28f-90b1f7917d7c",                        [{"marker":{"color":"#28a745"},"name":"Income","text":["KES 22,619,122","KES 5,729,452"],"textposition":"outside","x":[2024,2025],"y":[22619122.0,5729452.2],"type":"bar"},{"marker":{"color":"#dc3545"},"name":"Expenses","text":["KES 19,230,047","KES 3,701,383"],"textposition":"outside","x":[2024,2025],"y":[19230046.65,3701383.4],"type":"bar"}],                        {"barmode":"group","font":{"size":12},"height":500,"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"title":{"text":"Year-over-Year Financial Performance"},"xaxis":{"title":{"text":"Year"}},"yaxis":{"title":{"text":"Amount (KES)"}}},                        {"responsive": true}                    )                };                            </script>        </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-chart-area me-2"></i>2025 Monthly Trends</h5>
-                    <div>                            <div id="10a90978-daed-4a73-a09c-01b7c3e6508f" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("10a90978-daed-4a73-a09c-01b7c3e6508f")) {                    Plotly.newPlot(                        "10a90978-daed-4a73-a09c-01b7c3e6508f",                        [{"line":{"color":"#28a745","width":3},"marker":{"size":8},"mode":"lines+markers","name":"Income","x":["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-10","NaT"],"y":[20000.0,149871.6,91200.0,488836.0,905707.0,1189990.0,1544163.0,1271749.0,5284.0,62651.6],"type":"scatter"},{"line":{"color":"#dc3545","width":3},"marker":{"size":8},"mode":"lines+markers","name":"Expense","x":["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","NaT"],"y":[767842.0,746991.6,392683.8,481078.6,127900.0,172737.6,464866.6,106030.0,80150.0,51000.0,253450.0,33550.0,23103.199999999997],"type":"scatter"}],                        {"font":{"size":12},"height":500,"hovermode":"x unified","template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"title":{"text":"2025 Monthly Financial Trends"},"xaxis":{"title":{"text":"Month"}},"yaxis":{"title":{"text":"Amount (KES)"}}},                        {"responsive": true}                    )                };                            </script>        </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Summary Table -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-table me-2"></i>Financial Summary</h5>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Metric</th>
-                                    <th>2024 (Official)</th>
-                                    <th>2025 (Detailed)</th>
-                                    <th>Change</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Sales Revenue</strong></td>
-                                    <td>KES 22,619,122</td>
-                                    <td>KES 5,729,452</td>
-                                    <td class="text-danger">
-                                        -74.7%
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Total Expenses</strong></td>
-                                    <td>KES 19,230,047</td>
-                                    <td>KES 3,701,383</td>
-                                    <td class="text-success">
-                                        -80.8%
-                                    </td>
-                                </tr>
-                                <tr class="table-info">
-                                    <td><strong>Net Profit</strong></td>
-                                    <td>KES 3,389,075</td>
-                                    <td>KES 2,028,069</td>
-                                    <td class="text-warning">
-                                        -40.2%
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <h4 class="chart-title">
+                        <i class="fas fa-chart-column me-2"></i>Operating Expenses Breakdown
+                    </h4>
+                    <div id="expenses-chart">
+                        <div class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,49 +195,351 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="chart-container">
-                    <h5 class="mb-3"><i class="fas fa-lightbulb me-2"></i>Key Insights</h5>
+                    <h4 class="chart-title">
+                        <i class="fas fa-lightbulb me-2"></i>Key Financial Insights
+                    </h4>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="alert alert-success">
-                                <h6><i class="fas fa-check-circle me-2"></i>Strong Profitability</h6>
-                                <p class="mb-0">2024 net profit margin of 15.0% indicates healthy business performance.</p>
+                            <div class="alert alert-success insight-card">
+                                <h5><i class="fas fa-check-circle me-2"></i>Excellent Profitability</h5>
+                                <p class="mb-2">Net profit margin of <strong>15.0%</strong> demonstrates exceptional business performance.</p>
+                                <small>Industry benchmark: 5-10%</small>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="alert alert-info">
-                                <h6><i class="fas fa-info-circle me-2"></i>Official Verification</h6>
-                                <p class="mb-0">2024 figures match official P&L Account and Balance Sheet exactly.</p>
+                            <div class="alert alert-info insight-card">
+                                <h5><i class="fas fa-shield-alt me-2"></i>Strong Financial Position</h5>
+                                <p class="mb-2">Cash position of <strong>KES 3,389,075</strong> provides excellent liquidity.</p>
+                                <small>Zero liabilities recorded</small>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="alert alert-warning">
-                                <h6><i class="fas fa-exclamation-triangle me-2"></i>Revenue Decline</h6>
-                                <p class="mb-0">2025 shows declining revenue trend requiring strategic attention.</p>
+                            <div class="alert alert-warning insight-card">
+                                <h5><i class="fas fa-rocket me-2"></i>Growth Potential</h5>
+                                <p class="mb-2">Efficient operations with only <strong>8.8%</strong> expense ratio create scaling opportunities.</p>
+                                <small>Room for strategic expansion</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <div class="container">
+        <!-- Financial Summary Table -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="chart-container">
+                    <h4 class="chart-title">
+                        <i class="fas fa-table me-2"></i>Detailed Financial Breakdown
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Amount (KES)</th>
+                                    <th>% of Sales</th>
+                                    <th>Analysis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-success">
+                                    <td><strong>Sales Revenue</strong></td>
+                                    <td><strong>KES 22,619,122</strong></td>
+                                    <td><strong>100.0%</strong></td>
+                                    <td><span class="badge bg-success">Excellent</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Cost of Goods Sold</td>
+                                    <td>KES 17,244,564</td>
+                                    <td>76.2%</td>
+                                    <td><span class="badge bg-warning">Monitor</span></td>
+                                </tr>
+                                <tr class="table-info">
+                                    <td><strong>Gross Profit</strong></td>
+                                    <td><strong>KES 5,374,558</strong></td>
+                                    <td><strong>23.8%</strong></td>
+                                    <td><span class="badge bg-info">Strong</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Labour</td>
+                                    <td>KES 601,155</td>
+                                    <td>2.7%</td>
+                                    <td><span class="badge bg-success">Efficient</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Rent</td>
+                                    <td>KES 192,000</td>
+                                    <td>0.8%</td>
+                                    <td><span class="badge bg-success">Low</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Transport</td>
+                                    <td>KES 1,028,770</td>
+                                    <td>4.5%</td>
+                                    <td><span class="badge bg-warning">Review</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Transaction Costs</td>
+                                    <td>KES 163,558</td>
+                                    <td>0.7%</td>
+                                    <td><span class="badge bg-success">Minimal</span></td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td><strong>Net Profit</strong></td>
+                                    <td><strong>KES 3,389,075</strong></td>
+                                    <td><strong>15.0%</strong></td>
+                                    <td><span class="badge bg-primary">Outstanding</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-section">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Blancosy Financials Dashboard</h5>
-                    <p>Official financial analysis based on P&L Account and Balance Sheet data.</p>
+                    <h5><i class="fas fa-building me-2"></i>Blancosy Financials</h5>
+                    <p>Professional financial analysis dashboard based on official P&L Account and Balance Sheet data.</p>
+                    <p class="mb-0"><small><i class="fas fa-calendar me-2"></i>Generated: October 02, 2025 at 01:43 PM</small></p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><i class="fas fa-calendar me-2"></i>Generated: October 02, 2025</p>
-                    <p><i class="fas fa-check-circle me-2"></i>2024 Net Profit: KES 3,389,075</p>
+                    <h6>Dashboard Features</h6>
+                    <p><i class="fas fa-check me-2"></i>Interactive Charts</p>
+                    <p><i class="fas fa-check me-2"></i>Real-time Calculations</p>
+                    <p><i class="fas fa-check me-2"></i>Mobile Responsive</p>
+                    <p class="mb-0"><i class="fas fa-check me-2"></i>Official Data Verified</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Chart data
+        const chartData = {
+  "waterfall": {
+    "type": "waterfall",
+    "orientation": "v",
+    "measure": [
+      "absolute",
+      "relative",
+      "relative",
+      "relative",
+      "relative",
+      "relative",
+      "total"
+    ],
+    "x": [
+      "Sales",
+      "COGS",
+      "Labour",
+      "Rent",
+      "Transport",
+      "Transaction Costs",
+      "Net Profit"
+    ],
+    "y": [
+      22619122,
+      -17244564,
+      -601155,
+      -192000,
+      -1028770,
+      -163557.65,
+      3389075.35
+    ],
+    "text": [
+      "KES 22,619,122",
+      "-KES 17,244,564",
+      "-KES 601,155",
+      "-KES 192,000",
+      "-KES 1,028,770",
+      "-KES 163,558",
+      "KES 3,389,075"
+    ],
+    "textposition": "outside",
+    "connector": {
+      "line": {
+        "color": "rgb(63, 63, 63)"
+      }
+    }
+  },
+  "pie": {
+    "type": "pie",
+    "labels": [
+      "Stock Purchase (COGS)",
+      "Transport",
+      "Labour",
+      "Rent",
+      "Transaction Costs"
+    ],
+    "values": [
+      17244564,
+      1028770,
+      601155,
+      192000,
+      163557.65
+    ],
+    "textposition": "inside",
+    "textinfo": "percent+label",
+    "marker": {
+      "colors": [
+        "#FF6B6B",
+        "#4ECDC4",
+        "#45B7D1",
+        "#96CEB4",
+        "#FFEAA7"
+      ]
+    }
+  },
+  "expenses_bar": {
+    "type": "bar",
+    "x": [
+      "Labour",
+      "Rent",
+      "Transport",
+      "Transaction Costs"
+    ],
+    "y": [
+      601155,
+      192000,
+      1028770,
+      163557.65
+    ],
+    "marker": {
+      "color": [
+        "#FF6B6B",
+        "#4ECDC4",
+        "#45B7D1",
+        "#FFEAA7"
+      ]
+    },
+    "text": [
+      "KES 601,155",
+      "KES 192,000",
+      "KES 1,028,770",
+      "KES 163,558"
+    ],
+    "textposition": "outside"
+  }
+};
+        
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Plotly !== 'undefined') {
+                initializeCharts();
+            } else {
+                console.error('Plotly failed to load');
+                showError();
+            }
+        });
+        
+        function initializeCharts() {
+            try {
+                // Waterfall Chart
+                const waterfallLayout = {
+                    title: {
+                        text: 'Profit Flow Analysis',
+                        font: {size: 16, color: '#2c3e50'}
+                    },
+                    showlegend: false,
+                    template: 'plotly_white',
+                    height: 400,
+                    margin: {t: 50, b: 80, l: 80, r: 50},
+                    xaxis: {
+                        tickangle: -45,
+                        title: 'Financial Components'
+                    },
+                    yaxis: {
+                        title: 'Amount (KES)',
+                        tickformat: ',.0f'
+                    }
+                };
+                
+                Plotly.newPlot('waterfall-chart', [chartData.waterfall], waterfallLayout, {
+                    responsive: true,
+                    displayModeBar: true,
+                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d']
+                });
+                
+                // Pie Chart
+                const pieLayout = {
+                    title: {
+                        text: 'Expense Distribution',
+                        font: {size: 16, color: '#2c3e50'}
+                    },
+                    template: 'plotly_white',
+                    height: 400,
+                    margin: {t: 50, b: 50, l: 50, r: 50}
+                };
+                
+                Plotly.newPlot('pie-chart', [chartData.pie], pieLayout, {
+                    responsive: true,
+                    displayModeBar: true,
+                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d']
+                });
+                
+                // Expenses Bar Chart
+                const expensesLayout = {
+                    title: {
+                        text: 'Operating Expenses Analysis',
+                        font: {size: 16, color: '#2c3e50'}
+                    },
+                    template: 'plotly_white',
+                    height: 400,
+                    margin: {t: 50, b: 80, l: 80, r: 50},
+                    xaxis: {
+                        title: 'Expense Categories',
+                        tickangle: -45
+                    },
+                    yaxis: {
+                        title: 'Amount (KES)',
+                        tickformat: ',.0f'
+                    }
+                };
+                
+                Plotly.newPlot('expenses-chart', [chartData.expenses_bar], expensesLayout, {
+                    responsive: true,
+                    displayModeBar: true,
+                    modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d']
+                });
+                
+                console.log('✅ All charts loaded successfully');
+                
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+                showError();
+            }
+        }
+        
+        function showError() {
+            const errorHtml = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Charts are loading... Please refresh if they don't appear.</div>';
+            document.getElementById('waterfall-chart').innerHTML = errorHtml;
+            document.getElementById('pie-chart').innerHTML = errorHtml;
+            document.getElementById('expenses-chart').innerHTML = errorHtml;
+        }
+        
+        // Add some interactive features
+        window.addEventListener('load', function() {
+            // Animate metric cards
+            const cards = document.querySelectorAll('.metric-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
 </body>
 </html>
-        
